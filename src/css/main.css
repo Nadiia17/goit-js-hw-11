@@ -1,0 +1,45 @@
+body {
+  font-family: 'Roboto', sans-serif;
+}
+
+/* Стилі для головного контейнера сітки */
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* 3 стовпчики з однаковою шириною */
+  grid-gap: 16px; /* Відступи між елементами сітки */
+  margin: 0 auto; /* Вирівнюємо сітку по центру */
+  max-width: 1200px; /* Максимальна ширина сітки */
+}
+
+/* Стилі для кожної картки */
+.photo-card {
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden; /* Для заокруглення кутів */
+}
+
+/* Стилі для зображення всередині картки */
+.photo-card img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Стилі для інформаційної секції всередині картки */
+.info {
+  padding: 16px;
+}
+
+/* Стилі для кожного елемента інформації */
+.info-item {
+  margin-bottom: 8px;
+  font-size: 14px;
+}
+
+/* Стилі для посилань в картці */
+.photo-card a {
+  display: block;
+  text-decoration: none;
+}
