@@ -1,18 +1,20 @@
 const KEY = '39127781-8cd971fbdb6972a131015afc7';
 const URL = 'https://pixabay.com/api/';
 
-function fetchByQuery(query) {
+function fetchByQuery(query, currentPage = '1') {
   const params = new URLSearchParams({
     key: KEY,
     q: query,
     image_type: 'photo',
     orientation: 'horizontal',
     safesearch: true,
+    per_page: 40,
+    page: currentPage,
   });
 
   return fetch(`${URL}?${params}`)
     .then(response => response.json())
-    .then(data => data.hits);
+    .then(data => ({ hits: data.hits, totalHits: data.totalHits }));
 }
 
 export { fetchByQuery };
