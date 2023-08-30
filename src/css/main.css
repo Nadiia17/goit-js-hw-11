@@ -1,63 +1,116 @@
+/* Глобальні змінні */
+:root {
+  --column-gap: 24px;
+  --row-gap: 48px;
+  --items-in-row: 4;
+  --image-height: 200px; /* Додаємо фіксовану висоту для зображень */
+}
+
 body {
   font-family: 'Roboto', sans-serif;
 }
-.load-more-hidden {
-  display: none;
-}
 
-.load-more {
-  display: inline-block;
-  padding: 10px 20px;
-  font-size: 1.2em;
-  font-weight: bold;
-  text-align: center;
-  text-transform: uppercase;
-  border: none;
-  border-radius: 5px;
-  background-color: #007bff;
-  color: #fff;
-  cursor: pointer;
-  transition: background-color 0.3s ease-in-out, transform 0.2s ease-in-out;
-}
-
-/* Стилі для головного контейнера сітки */
 .gallery {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr); /* 3 стовпчики з однаковою шириною */
-  grid-gap: 16px; /* Відступи між елементами сітки */
-  margin: 0 auto; /* Вирівнюємо сітку по центру */
-  max-width: 1200px; /* Максимальна ширина сітки */
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--row-gap) var(--column-gap);
+  justify-content: center;
+  align-items: flex-start;
 }
 
-/* Стилі для кожної картки */
+/* Задаємо розмір для кожної фотокарти */
 .photo-card {
-  background: #fff;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  overflow: hidden; /* Для заокруглення кутів */
+  flex: 0 0
+    calc(
+      (100% - (var(--items-in-row) - 1) * var(--column-gap)) /
+        var(--items-in-row)
+    );
+  box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.2),
+    0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 2px 1px -1px rgba(0, 0, 0, 0.12);
+  position: relative;
+  border-radius: 4px;
 }
 
-/* Стилі для зображення всередині картки */
+/* Стилізація зображень у фотокартах */
 .photo-card img {
   width: 100%;
-  height: auto;
-  display: block;
+  height: var(--image-height);
+  object-fit: cover;
 }
 
-/* Стилі для інформаційної секції всередині картки */
+/* Додаємо флексбокс для блоку інформації */
 .info {
+  display: flex;
+  flex-direction: row; /* Робимо рядком */
+  flex-wrap: wrap;
   padding: 16px;
+  background: rgba(0, 0, 0, 0.1);
 }
 
-/* Стилі для кожного елемента інформації */
 .info-item {
-  margin-bottom: 8px;
+  flex: 1;
+  display: flex;
+  flex-direction: column; /* Вертикально для заголовка і значення */
+  justify-content: center;
+  align-items: center;
+  margin: 8px;
   font-size: 14px;
+  text-decoration: none;
+  color: black;
 }
 
-/* Стилі для посилань в картці */
-.photo-card a {
-  display: block;
+.info-title,
+.info-value {
   text-decoration: none;
+  color: black;
+}
+
+.info-item i {
+  color: gray;
+  font-size: 20px;
+  margin-bottom: 8px; /* додаємо відступ між іконкою і числом */
+}
+
+/* Стилі для форми пошуку */
+.search-form {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+/* Стилі для поля вводу */
+.search-form input {
+  width: 100%;
+  max-width: 400px; /* Максимальна ширина */
+  padding: 10px 20px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  outline: none;
+}
+
+/* Стилі для кнопки пошуку */
+.search-form button {
+  padding: 10px 20px;
+  margin-left: 10px;
+  border: none;
+  border-radius: 4px;
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
+}
+
+/* Стилі для кнопки "Load more" */
+.load-more {
+  display: block;
+  margin: 20px auto;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
+}
+
+.load-more-hidden {
+  display: none;
 }

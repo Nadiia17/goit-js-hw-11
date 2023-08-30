@@ -3,6 +3,9 @@ import { fetchByQuery } from './pixabay-api';
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
 
+import Notiflix from 'notiflix';
+import 'notiflix/dist/notiflix-3.2.6.min.css';
+
 let page = 1;
 let totalHits = 0;
 let searchQuery = '';
@@ -24,9 +27,20 @@ function handleSubmit(event) {
   page = 1;
   elements.gallery.innerHTML = '';
 
-  fetchAndDisplay();
-
-  elements.loadMoreBtn.classList.replace('load-more-hidden', 'load-more');
+  fetchByQuery(searchQuery, page).then(({ totalHits }) => {
+    if (totalHits === 0) {
+      Notiflix.Notify.info(
+        'Sorry, nothing was found according your serch query'
+      );
+      elements.loadMoreBtn.classList.add('load-more-hidden');
+    } else {
+      Notiflix.Notify.info(`Hooray! We found ${totalHits} images.`);
+      fetchAndDisplay();
+      if (totalHits > 40) {
+        elements.loadMoreBtn.classList.replace('load-more-hidden', 'load-more');
+      }
+    }
+  });
 }
 
 function handleLodaMore() {
@@ -41,12 +55,16 @@ function fetchAndDisplay() {
       elements.gallery.insertAdjacentHTML('beforeend', markup);
       new SimpleLightbox('.gallery a');
 
-      if (page * 40 >= totalHits) {
-        elements.loadMoreBtn.classList.add('load-more-hidden');
-        alert("We're sorry, but you've reached the end of search results.");
+      if (page * 40 >= totalHits && totalHits > 0 && page > 1) {
+        // elements.loadMoreBtn.classList.add('load-more-hidden');
+        elements.loadMoreBtn.classList.replace('load-more', 'load-more-hidden');
+        Notiflix.Notify.info(
+          "We're sorry, but you've reached the end of search results."
+        );
       }
     })
     .catch(error => {
+      Notiflix.Notify.failure('Something went wrong. Try reload the page');
       console.error('There was a problem with the fetch operation:', error);
     });
 }
@@ -64,23 +82,26 @@ function createMarkup(arr) {
         downloads,
       }) => `<div class="photo-card">
   <a href="${largeImageURL}">
-  <img src="${webformatURL}" alt="${tags}" loading="lazy" />
-
-  <div class="info">
-    <p class="info-item">
-      <b>Likes: ${likes}</b>
-    </p>
-    <p class="info-item">
-      <b>Views: ${views}</b>
-    </p>
-    <p class="info-item">
-      <b>Comments: ${comments}</b>
-    </p>
-    <p class="info-item">
-      <b>Downloads: ${downloads}</b>
-    </p>
-  </div>
+    <img src="${webformatURL}" alt="${tags}" loading="lazy" />
   </a>
+  <div class="info">
+  <div class="info-item">
+    <i class="fas fa-heart"></i> <!-- іконка для Likes -->
+    <span>${likes}</span>
+  </div>
+  <div class="info-item">
+    <i class="fas fa-eye"></i> <!-- іконка для Views -->
+    <span>${views}</span>
+  </div>
+  <div class="info-item">
+    <i class="fas fa-comments"></i> <!-- іконка для Comments -->
+    <span>${comments}</span>
+  </div>
+  <div class="info-item">
+    <i class="fas fa-download"></i> <!-- іконка для Downloads -->
+    <span>${downloads}</span>
+  </div>
+</div>
 </div>`
     )
     .join('');
