@@ -9,6 +9,7 @@ import 'notiflix/dist/notiflix-3.2.6.min.css';
 let page = 1;
 let totalHits = 0;
 let searchQuery = '';
+const lightbox = new SimpleLightbox('.gallery a');
 
 const elements = {
   form: document.querySelector('.search-form'),
@@ -68,7 +69,7 @@ async function fetchAndDisplay() {
     const markup = createMarkup(hits);
     elements.gallery.insertAdjacentHTML('beforeend', markup);
 
-    new SimpleLightbox('.gallery a');
+    lightbox.refresh();
 
     if (page * 40 >= totalHits && totalHits > 0 && page > 1) {
       elements.loadMoreBtn.classList.replace('load-more', 'load-more-hidden');

@@ -7,9 +7,10 @@ import Notiflix from 'notiflix';
 import 'notiflix/dist/notiflix-3.2.6.min.css';
 
 let page = 1;
-let totalHits = 0;
+let totalHitsGlobal = 0;
 let searchQuery = '';
 let isLoading = false;
+const lightbox = new SimpleLightbox('.gallery a');
 
 const elements = {
   form: document.querySelector('.search-form'),
@@ -23,24 +24,21 @@ window.addEventListener('scroll', handleScroll);
 
 async function handleSubmit(event) {
   event.preventDefault();
+  window.addEventListener('scroll', handleScroll);
   searchQuery = elements.input.value;
   page = 1;
   elements.gallery.innerHTML = '';
 
   try {
     const { totalHits } = await fetchByQuery(searchQuery, page);
-
+    totalHitsGlobal = totalHits;
     if (totalHits === 0) {
       Notiflix.Notify.info(
         'Sorry, nothing was found according your serch query'
       );
-      //   elements.loadMoreBtn.classList.add('load-more-hidden');
     } else {
       Notiflix.Notify.info(`Hooray! We found ${totalHits} images.`);
       await fetchAndDisplay();
-      //   if (totalHits > 40) {
-      //     elements.loadMoreBtn.classList.replace('load-more-hidden', 'load-more');
-      //   }
     }
   } catch (error) {
     Notiflix.Notify.failure('Something went wrong. Try reload the page');
@@ -48,11 +46,12 @@ async function handleSubmit(event) {
   }
 }
 
-async function handleLodaMore() {
+async function handleLoadMore() {
+  if (isLoading) return;
   isLoading = true;
   page += 1;
   await fetchAndDisplay();
-  //  плавне прокручування
+  //    плавне прокручування
   const { height: cardHeight } = document
     .querySelector('.gallery')
     .firstElementChild.getBoundingClientRect();
@@ -61,15 +60,14 @@ async function handleLodaMore() {
     top: cardHeight * 2,
     behavior: 'smooth',
   });
-  isLoading = false;
 }
 
 function handleScroll() {
   if (isLoading) return;
 
   const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
-  if (scrollTop + clientHeight >= scrollHeight - 5) {
-    handleLodaMore();
+  if (scrollTop + clientHeight >= scrollHeight - 50) {
+    handleLoadMore();
   }
 }
 
@@ -80,7 +78,7 @@ async function fetchAndDisplay() {
     const markup = createMarkup(hits);
     elements.gallery.insertAdjacentHTML('beforeend', markup);
 
-    new SimpleLightbox('.gallery a');
+    lightbox.refresh();
 
     if (page * 40 >= totalHits && totalHits > 0 && page > 1) {
       Notiflix.Notify.info(
@@ -88,11 +86,10 @@ async function fetchAndDisplay() {
       );
       window.removeEventListener('scroll', handleScroll);
     }
-
-    isLoading = false;
   } catch (error) {
     Notiflix.Notify.failure('Something went wrong. Try reload the page');
     console.error('There was a problem with the fetch operation:', error);
+  } finally {
     isLoading = false;
   }
 }
