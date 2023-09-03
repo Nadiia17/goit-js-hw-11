@@ -118,3 +118,25 @@ body {
 .load-more-hidden {
   display: none;
 }
+
+.scroll-to-top {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1000;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.fas.fa-arrow-up {
+  margin: 0;
+  padding: 0;
+}
+
+.hidden {
+  display: none;
+}
