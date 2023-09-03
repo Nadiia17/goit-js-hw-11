@@ -138,6 +138,7 @@ function createMarkup(arr) {
 }
 
 const scrollToTopButton = document.getElementById('scrollToTopButton');
+const scrollToBottomButton = document.getElementById('scrollToBottomButton');
 
 window.addEventListener('scroll', () => {
   if (window.pageYOffset > 200) {
@@ -148,9 +149,35 @@ window.addEventListener('scroll', () => {
   }
 });
 
+window.addEventListener('scroll', () => {
+  const { scrollHeight, clientHeight } = document.documentElement;
+  const isScrollable = scrollHeight > clientHeight;
+  const isScrolledToBottom =
+    window.pageYOffset >= scrollHeight - clientHeight - 1;
+
+  if (isScrollable && !isScrolledToBottom) {
+    scrollToBottomButton.classList.remove('hidden');
+  } else {
+    scrollToBottomButton.classList.add('hidden');
+  }
+
+  if (window.pageYOffset > 200) {
+    scrollToTopButton.classList.remove('hidden');
+  } else {
+    scrollToTopButton.classList.add('hidden');
+  }
+});
+
 scrollToTopButton.addEventListener('click', () => {
   window.scrollTo({
     top: 0,
+    behavior: 'smooth',
+  });
+});
+
+scrollToBottomButton.addEventListener('click', () => {
+  window.scrollTo({
+    top: document.body.scrollHeight,
     behavior: 'smooth',
   });
 });
