@@ -119,9 +119,10 @@ body {
   display: none;
 }
 
-.scroll-to-top {
+.scroll-to-top,
+.scroll-to-bottom {
   position: fixed;
-  bottom: 20px;
+  bottom: 20px; /* Adjust for .scroll-to-bottom if needed */
   right: 20px;
   z-index: 1000;
   background-color: #007bff;
@@ -132,7 +133,12 @@ body {
   cursor: pointer;
 }
 
-.fas.fa-arrow-up {
+.scroll-to-bottom {
+  bottom: 60px; /* Position it differently than the scroll-to-top button */
+}
+
+.fas.fa-arrow-up,
+.fas.fa-arrow-down {
   margin: 0;
   padding: 0;
 }
