@@ -24,9 +24,18 @@ elements.loadMoreBtn.addEventListener('click', handleLodaMore);
 
 async function handleSubmit(event) {
   event.preventDefault();
-  searchQuery = elements.input.value;
+  searchQuery = elements.input.value.trim();
   page = 1;
   elements.gallery.innerHTML = '';
+
+  if (elements.loadMoreBtn.classList.contains('load-more')) {
+    elements.loadMoreBtn.classList.replace('load-more', 'load-more-hidden');
+  }
+
+  if (searchQuery === '') {
+    Notiflix.Notify.failure('Input query to start search');
+    return;
+  }
 
   try {
     const { totalHits } = await fetchByQuery(searchQuery, page);

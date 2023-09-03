@@ -25,9 +25,14 @@ window.addEventListener('scroll', handleScroll);
 async function handleSubmit(event) {
   event.preventDefault();
   window.addEventListener('scroll', handleScroll);
-  searchQuery = elements.input.value;
+  searchQuery = elements.input.value.trim();
   page = 1;
   elements.gallery.innerHTML = '';
+
+  if (searchQuery === '') {
+    Notiflix.Notify.failure('Input query to start search');
+    return;
+  }
 
   try {
     const { totalHits } = await fetchByQuery(searchQuery, page);
